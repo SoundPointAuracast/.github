@@ -1,0 +1,29 @@
+%%{init: {"theme": "neutral", "themeVariables": {"fontSize": "14px"}}}%%
+flowchart TB
+    MIC["Микрофон преподавателя / микшер / PA"] --> CLEAN["CLEAN SOURCE (PCM)"]
+
+    CLEAN --> AUDIO["AUDIO BRANCH"]
+    CLEAN --> DATA["DATA BRANCH"]
+
+    AUDIO --> LC3["LC3 encode"]
+    LC3 --> AURA["Auracast (PBP/BAP, BIG/BIS)"]
+
+    AURA --> SINK["Прямой приём (compatible sink)"]
+    AURA --> BRIDGE["Bridge-T (KNOWN_CLASS)"]
+
+    SINK --> DEV1["Наушники / совм. СА / КИ"]
+    BRIDGE --> TMT["T/MT -> СА / КИ (старый парк)"]
+
+    DATA --> ASR["ASR (локальный движок)"]
+    ASR --> TR["transcript + timestamps"]
+    TR --> APP["Route+ App (USB/WebSocket)"]
+
+    APP -. "одна сессия (не аудиоцепочка)" .- DEV1
+    APP -. "текст без аудио" .- USER["Пользователь"]
+
+    classDef audio fill:#e7f0fb,stroke:#12305c,color:#12305c;
+    classDef data fill:#eaf5ea,stroke:#14532d,color:#14532d;
+    classDef app fill:#fff4e5,stroke:#8a4b00,color:#8a4b00;
+    class AUDIO,LC3,AURA,SINK,BRIDGE,DEV1,TMT audio;
+    class DATA,ASR,TR data;
+    class APP,USER app;
